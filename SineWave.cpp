@@ -8,7 +8,7 @@ void SineWave::renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time global
 		noteHandler.update(globalPlayBackPostion);
 		int tmp = 0;
 		for (Note & note : noteHandler.activeNotes) {
-			tmp += (5000.0f * std::sinf(3.1415926535f * 2.0f * note.freq * (float)(playBackPosInSamples + i) / 44100.0f));
+			tmp += (5000.0f * std::sinf(PI * 2.0f * note.freq * (float)(playBackPosInSamples + i) / 44100.0f));
 		}
 		buffer[i] = (sf::Int16)tmp;
 	}

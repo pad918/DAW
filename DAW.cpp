@@ -4,16 +4,10 @@
 DAW::DAW()
 {
 	//TMP CODE
-	Synth * tmp = new SineWave(1000);
-	sf::Time c1; c1 = sf::seconds(1.0f);
-	sf::Time c2; c2 = sf::seconds(2.0f);
-	sf::Time c3; c3 = sf::seconds(3.0f);
-	sf::Time r1; r1 = sf::seconds(7.0f);
-	sf::Time r2; r2 = sf::seconds(7.0f);
-	sf::Time r3; r3 = sf::seconds(7.0f);
-	tmp->noteHandler.addNote(c1, r1, 400);
-	tmp->noteHandler.addNote(c2, r2, 500);
-	tmp->noteHandler.addNote(c3, r3, 600);
+	Synth * tmp = new HarmonicForm();
+	tmp->noteHandler.addNote(sf::seconds(1.0f), sf::seconds(2.5f), A4);
+	tmp->noteHandler.addNote(sf::seconds(1.5f), sf::seconds(2.5f), C4);
+	tmp->noteHandler.addNote(sf::seconds(2.0f), sf::seconds(2.5f), D4);
 	synths.push_back(tmp);
 	//END TMP CODE
 

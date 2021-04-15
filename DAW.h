@@ -4,6 +4,7 @@
 #include "AudioPlaybackStream.h"
 #include "Synth.h"
 #include "SineWave.h"
+#include "HarmonicForm.h"
 
 class DAW {
 private:
@@ -15,7 +16,4 @@ public:
 	void update();
 	void render(sf::RenderWindow & window);
 	
-	
-
-
 };

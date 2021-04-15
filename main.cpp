@@ -3,7 +3,7 @@ A basic DAW made by Måns Abrahamsson
 Project started: 2021-04-15
 
 Progress:
-2021-04-15: 60 lines
+2021-04-15: 267 lines
 */
 #include <iostream>
 #include <SFML/Graphics.hpp>
