@@ -11,4 +11,5 @@ protected:
 public:
 	virtual void renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time globalPlayBackPostion, int sampleRate) = 0;
 	NoteHandler noteHandler;
+	float amplitude = 1.0f;
 };

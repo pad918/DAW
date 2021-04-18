@@ -23,7 +23,8 @@ void HarmonicForm::renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time gl
 				tmp += (32768.0f * 0.05f * amplitude_parameter[k] * std::cosf(PI * 2.0f * note.freq * (float)(k+1) 
 					 * ((float)(playBackPosInSamples + i) / 44100.0f) + offset_parameter[k]));
 			}
-			tmp *= note.getAmp(globalPlayBackPostion + sf::seconds(i / 44100.0f), attack, decay);
+			tmp *= note.velocity * note.getAmp(globalPlayBackPostion + sf::seconds(i / 44100.0f), attack, decay);
+			tmp *= amplitude;
 			sumAllNotes += tmp;
 		}
 		buffer[i] = (sf::Int16)sumAllNotes;

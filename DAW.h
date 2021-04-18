@@ -1,10 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
+#include <fstream>
 #include "AudioPlaybackStream.h"
 #include "Synth.h"
 #include "SineWave.h"
 #include "HarmonicForm.h"
+#include "MIDI/Midi.h"
 
 class DAW {
 private:

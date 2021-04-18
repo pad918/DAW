@@ -17,9 +17,11 @@
 
 class Note {
 public:
+	int keyNum = 0;
 	int status = 0;
 	sf::Time clickTime, releaseTime;
 	bool isDead = false;
 	float freq = 1000;
+	float velocity = 1.0f;
 	float getAmp(sf::Time globalPlayBackPostion, float attack_time, float decay_time);
 };

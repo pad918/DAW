@@ -3,3 +3,5 @@
 *.filters
 *.user
 /x64/
+/MIDI/
+*.mid
