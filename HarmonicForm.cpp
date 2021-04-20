@@ -2,10 +2,10 @@
 
 HarmonicForm::HarmonicForm()
 {
-	amplitude_parameter = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0, 0.0, 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.30f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.1f, 0, 0 };
+	amplitude_parameter = {1.0f, 0.4f, 0.4f, 0.6f, 0.3f, 0.4, 0.1, 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0, 0, 0, 0, 0, 0, 0.0f, 0, 0 };
 	offset_parameter = {0, 0.0, 0.0, 0, 0.0, 0.0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.125f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.01, 0, 0 };
 	for (int i = 0; i < 32; i+=1) {
-		amplitude_parameter[i] = 1.0f / (1.0 + (float)(i % 2 + i));
+		amplitude_parameter[i] = 1.0f / (1.0 + (float)(i % 4 + i));
 		//offset_parameter[i] = 1.0f - (1.0f / (1.0 + (float)i));
 	}
 }

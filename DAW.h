@@ -7,6 +7,8 @@
 #include "Synth.h"
 #include "SineWave.h"
 #include "HarmonicForm.h"
+#include "BassDrum.h"
+#include "Sampler.h"
 #include "MIDI/Midi.h"
 
 class DAW {

@@ -4,4 +4,8 @@
 *.user
 /x64/
 /MIDI/
+/samples/
+*.wav
+*.mp3
+*.mp4
 *.mid

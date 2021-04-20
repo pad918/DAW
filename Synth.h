@@ -7,9 +7,10 @@
 
 class Synth {
 protected:
-	float attack = 0.05f, decay = 0.1f; 
+	 
 public:
 	virtual void renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time globalPlayBackPostion, int sampleRate) = 0;
 	NoteHandler noteHandler;
 	float amplitude = 1.0f;
+	float attack = 0.05f, decay = 0.1f;
 };

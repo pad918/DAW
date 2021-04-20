@@ -42,6 +42,63 @@ bool NoteHandler::sort(Note a, Note b)
 	return a.clickTime < b.clickTime;
 }
 
+void NoteHandler::DEBUG_PRINT_INSTRUMENTNAME(int id, int channel)
+{
+	std::cout << "Channel = " << channel << "\n";
+	if (channel == 9) {
+		std::cout << "DRUMS\n";
+		return;
+	}
+	if (id < 8) {
+		std::cout << "Piano\n";
+	}
+	else if (id < 16) {
+		std::cout << "Chromatic Percussion\n";
+	}
+	else if (id < 24) {
+		std::cout << "Organ\n";
+	}
+	else if (id < 32) {
+		std::cout << "Guitar\n";
+	}
+	else if (id < 40) {
+		std::cout << "Bass\n";
+	}
+	else if (id < 48) {
+		std::cout << "Strings\n";
+	}
+	else if (id < 56) {
+		std::cout << "Ensemble\n";
+	}
+	else if (id < 64) {
+		std::cout << "Brass\n";
+	}
+	else if (id < 72) {
+		std::cout << "Reed\n";
+	}
+	else if (id < 80) {
+		std::cout << "Pipe\n";
+	}
+	else if (id < 88) {
+		std::cout << "Synth Lead\n";
+	}
+	else if (id < 96) {
+		std::cout << "Synth Pad\n";
+	}
+	else if (id < 104) {
+		std::cout << "Synth Effects\n";
+	}
+	else if (id < 112) {
+		std::cout << "Ethnic\n";
+	}
+	else if (id < 120) {
+		std::cout << "Percussive\n";
+	}
+	else {
+		std::cout << "Sound Effects\n";
+	}
+}
+
 void NoteHandler::update(sf::Time currentTime)
 {
 	//Check if new notes were pressed
@@ -75,9 +132,11 @@ void NoteHandler::addNote(sf::Time start, sf::Time end, float freq)
 	allNotes.push_back(tmp);
 }
 
-void NoteHandler::loadFromMidiTrack(TrackChunk & track)
+void NoteHandler::loadFromMidiTrack(TrackChunk & track, int timeDivision)
 {
+	float tickFraction = (float)5E5 / timeDivision;
 	long time=0;
+	int program_change = 0;
 	std::vector<Note> clickedNotes;
 	auto events = track.getEvents();
 	for (auto event : events) {
@@ -86,17 +145,11 @@ void NoteHandler::loadFromMidiTrack(TrackChunk & track)
 			//std::cout << "_______NOTE_______\n";
 			const MidiEvent * tmp = (MidiEvent*)ev;
 			auto status = tmp->getStatus();
-			int type = status >> 4;
 			int deltaTime = event.getDeltaTime().getData();
 			int velocity = tmp->getData() & 0b1111111;
-			time += deltaTime < 10000 ? deltaTime : 0;
-			if (type == 0b1001 || type == 0b1000) {
-				//std::cout << "Note = " << keyIdToFrequency((int)tmp->getNote()) << "\n";
-				//std::cout << "Status = " << tmp->getStatus() << "\n";
-				//std::cout << "DeltaTime = " << event.getDeltaTime().getData() << "\n";
-			}
-			if (type == 0b1001 && velocity != 0) {
-				sf::Time clickTime = sf::seconds(time / 1000.0f);
+			time += deltaTime;// < 10000 ? deltaTime : 0;
+			if (status == MidiType::NoteOn && velocity != 0) {
+				sf::Time clickTime = sf::seconds(time / tickFraction);
 				Note note;
 				note.velocity = velocity / 127.0f;
 				note.clickTime = clickTime;
@@ -104,12 +157,12 @@ void NoteHandler::loadFromMidiTrack(TrackChunk & track)
 				note.freq = keyIdToFrequency((int)tmp->getNote());
 				clickedNotes.push_back(note);
 			}
-			if (type == 0b1000 || (type = 0b1001 && velocity==0)) {
+			if (status == MidiType::NoteOff || (status == MidiType::NoteOn && velocity==0)) {
 				for (int i = 0; i < clickedNotes.size(); ++i) {
 					auto & note = clickedNotes[i];
 					if (note.keyNum == (int)tmp->getNote()) {
-						std::cout << "ADDED NOTE | startPos = " << note.clickTime.asSeconds() << "\n";
-						sf::Time relTime = sf::seconds(time / 1000.0f);
+						//std::cout << "ADDED NOTE | startPos = " << note.clickTime.asSeconds() << "\n";
+						sf::Time relTime = sf::seconds(time / tickFraction); //200
 						note.releaseTime = relTime;
 						allNotes.push_back(note);
 						clickedNotes.erase(clickedNotes.begin() + i);
@@ -117,9 +170,15 @@ void NoteHandler::loadFromMidiTrack(TrackChunk & track)
 					}
 				}
 			}
-			
+			if (status == MidiType::ProgramChange) {
+				int a = program_change;
+				program_change = tmp->getData();
+				//std::cout << "PC = " << program_change << " | channel = " << (tmp->getStatus() & 0xF) << " \n";
+				DEBUG_PRINT_INSTRUMENTNAME(program_change, tmp->getChannel());
+			}
 		}
 	}
+	std::cout << "Added " << allNotes.size() << " notes\n";
 	//Sort notes based on startTime:
 	//std::sort(allNotes.begin(), allNotes.end(), NoteHandler::sort);
 	std::sort(allNotes.begin(), allNotes.end(),
