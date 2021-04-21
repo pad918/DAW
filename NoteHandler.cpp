@@ -134,7 +134,7 @@ void NoteHandler::addNote(sf::Time start, sf::Time end, float freq)
 
 void NoteHandler::loadFromMidiTrack(TrackChunk & track, int timeDivision)
 {
-	float tickFraction = (float)5E5 / timeDivision;
+	float tickFraction = timeDivision * 2.0f;
 	long time=0;
 	int program_change = 0;
 	std::vector<Note> clickedNotes;

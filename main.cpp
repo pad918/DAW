@@ -4,6 +4,8 @@ Project started: 2021-04-15
 
 Progress:
 2021-04-15: 267 lines
+2021-04-20: 552 lines
+2021-04-21: 638 lines
 */
 #include <iostream>
 #include <SFML/Graphics.hpp>

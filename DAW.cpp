@@ -3,7 +3,7 @@
 DAW::DAW()
 {
 	//TEST MIDI
-	Midi midi{ "badapple.mid" };
+	Midi midi{ "eternal2.mid" };
 	auto tracks =  midi.getTracks();
 	auto& header = midi.getHeader();
 	//auto& tracks =	f.getTracks();
@@ -22,7 +22,7 @@ DAW::DAW()
 	tmp_synths.push_back(new HarmonicForm()); // NOT USED
 	tmp_synths.push_back(new HarmonicForm()); // NOT USED
 	tmp_synths.push_back(new HarmonicForm()); // MAIN SYNTH 
-	tmp_synths.push_back(new HarmonicForm()); // MAIN SYNTH
+	tmp_synths.push_back(new DrumMachine()); // MAIN SYNTH
 	tmp_synths.push_back(new HarmonicForm()); // PIANO
 	tmp_synths.push_back(new HarmonicForm()); // Lead
 	tmp_synths.push_back(new HarmonicForm()); // Lead
@@ -30,13 +30,13 @@ DAW::DAW()
 	tmp_synths.push_back(new HarmonicForm()); // Lead
 	tmp_synths.push_back(new HarmonicForm()); // Lead
 	tmp_synths.push_back(new HarmonicForm()); // Lead
-	tmp_synths.push_back(new Sampler("samples/bass_drum.wav")); // DRUM?
+	tmp_synths.push_back(new DrumMachine()); // DRUM?
 	//tmp_synths.push_back(new HarmonicForm());
 
 	tmp_synths[0]->amplitude = 0.0f;
 	tmp_synths[1]->amplitude = 0.0f;
 	tmp_synths[2]->amplitude = 0.5f;
-	tmp_synths[3]->amplitude = 0.5f;
+	tmp_synths[3]->amplitude = 0.4f;
 	tmp_synths[4]->amplitude = 0.5f;
 	tmp_synths[5]->amplitude = 0.5f;
 	tmp_synths[6]->amplitude = 0.5f;

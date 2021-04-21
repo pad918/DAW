@@ -33,13 +33,13 @@ std::vector<int16_t> FileHandler::loadWav(std::string path)
 	infile.read(buffer, length);
 
 	//Print header:
-	for (int i = 0; i < 44; ++i) {
-		std::cout << buffer[i] << "|";
-		if (i == 3 || i == 7 || i == 11 || i == 15 || i == 19 || i == 21 || i == 23 || i == 27 || i == 31 || i == 33 || i == 35 || i == 39 || i == 43) {
-			std::cout << "\n";
-		}
-	}
-	std::cout << "\n";
+	//for (int i = 0; i < 44; ++i) {
+	//	std::cout << buffer[i] << "|";
+	//	if (i == 3 || i == 7 || i == 11 || i == 15 || i == 19 || i == 21 || i == 23 || i == 27 || i == 31 || i == 33 || i == 35 || i == 39 || i == 43) {
+	//		std::cout << "\n";
+	//	}
+	//}
+	//std::cout << "\n";
 
 	//File size
 	for (int i = 4; i < 8; ++i)
@@ -71,7 +71,7 @@ std::vector<int16_t> FileHandler::loadWav(std::string path)
 	//	" | bits per sample = " << bitsPerSample << "\n" << " | data start pos = " << dataStartPos << " | data size = " << dataSize <<
 	//	" | dataChanBitDiv8 = " << bitSampleDiv8 << "\n";
 
-	std::cout << "Loading file...\n";
+	//std::cout << "Loading file...\n";
 	//Read one of the channels
 	std::vector<int16_t> samples;
 	samples.resize(((dataSize) / (2 * channels)));
@@ -79,7 +79,7 @@ std::vector<int16_t> FileHandler::loadWav(std::string path)
 	int sizeOfSamples = samples.size();
 	for (int i = dataStartPos + 4; i < length && ittr < sizeOfSamples; i += channels * 2) {
 		if (i % 5000000 == 0) {
-			std::cout << 100.0f * i / (float)length << "%\n";
+			//std::cout << 100.0f * i / (float)length << "%\n";
 		}
 		uint16_t tmp = (U(buffer[i + 1]) << 8) + U buffer[i];
 		samples[ittr] = (int16_t)tmp;

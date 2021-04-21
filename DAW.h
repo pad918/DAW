@@ -9,6 +9,7 @@
 #include "HarmonicForm.h"
 #include "BassDrum.h"
 #include "Sampler.h"
+#include "DrumMachine.h"
 #include "MIDI/Midi.h"
 
 class DAW {
