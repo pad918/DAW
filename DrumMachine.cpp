@@ -9,7 +9,7 @@ float DrumMachine::getCurrentSample(std::vector<float>& vector, unsigned long sa
 
 DrumMachine::DrumMachine()
 {
-	attack = 0.0f;
+	attack = 0.05f;
 	std::cout << "Loading samples...\n";
 	bassDrum = loadSamples("samples/bass_drum.wav");
 	highHat = loadSamples("samples/hihat.wav");

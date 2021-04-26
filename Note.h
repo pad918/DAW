@@ -24,4 +24,6 @@ public:
 	float freq = 1000;
 	float velocity = 1.0f;
 	float getAmp(sf::Time globalPlayBackPostion, float attack_time, float decay_time);
+	unsigned int channel = 0;
+	unsigned int instrument = 0;
 };

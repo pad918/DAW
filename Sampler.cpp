@@ -3,6 +3,7 @@
 Sampler::Sampler(std::string pathToSample)
 {
 	attack = 0.0f;
+	decay = 0.25f;
 	std::cout << "Loading sample...\n";
 	FileHandler file;
 	auto intSamples = file.loadWav(pathToSample);
@@ -18,15 +19,18 @@ Sampler::Sampler(std::string pathToSample)
 
 void Sampler::renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time globalPlayBackPostion, int sampleRate)
 {
+	float baseFreq = noteHandler.keyIdToFrequency(baseKey);
 	for (int i = 0; i < bufferSize; ++i) {
 		noteHandler.update(globalPlayBackPostion);
 		int sumAllNotes = 0;
 		for (Note & note : noteHandler.activeNotes) {
-			int playBackPosInSamples = (int)(0.5f + sampleRate * (globalPlayBackPostion.asSeconds() - note.clickTime.asSeconds()));
-			if (playBackPosInSamples + i >= samples.size()) {
+			int playBackPosInSamples = i + (int)(0.5f + sampleRate * (globalPlayBackPostion.asSeconds() - note.clickTime.asSeconds()));
+			float deltaPitch = note.freq / baseFreq;
+			playBackPosInSamples *= deltaPitch;
+			if (playBackPosInSamples >= samples.size()) {
 				break;
 			}
-			int tmp = samples[playBackPosInSamples + i] * 32768.0f;
+			int tmp = samples[playBackPosInSamples] * 32768.0f;
 			tmp *= note.velocity * note.getAmp(globalPlayBackPostion + sf::seconds(i / 44100.0f), attack, decay);
 			tmp *= amplitude;
 			sumAllNotes += tmp;

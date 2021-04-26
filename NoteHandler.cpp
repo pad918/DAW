@@ -5,7 +5,25 @@ float NoteHandler::keyIdToFrequency(int id)
 	int octave = (id / 12) - 1;
 	int key = id % 12;
 	
-	float octaveCoeff = std::pow(2, octave-4);
+	//float octaveCoeff = std::pow(2, octave - 4);
+	//FASTER THAN std::POW
+	float octaveCoeff = 1;
+	int exponent = octave - 4;
+	if (exponent == 0) {
+		octaveCoeff = 1;
+	}
+	else if (exponent < 0) {
+		while (exponent < 0) {
+			octaveCoeff *= 0.5f;
+			exponent++;
+		}
+	}
+	else {
+		while (exponent > 0) {
+			octaveCoeff *= 2.0f;
+			exponent--;
+		}
+	}
 	
 	switch (key) {
 	case 0: //  C
@@ -37,67 +55,79 @@ float NoteHandler::keyIdToFrequency(int id)
 	return -1;
 }
 
+void NoteHandler::setNotes(std::vector<Note>& notes)
+{
+	allNotes = notes;
+}
+
 bool NoteHandler::sort(Note a, Note b)
 {
 	return a.clickTime < b.clickTime;
 }
 
-void NoteHandler::DEBUG_PRINT_INSTRUMENTNAME(int id, int channel)
+std::string NoteHandler::getInstrumentName()
 {
-	std::cout << "Channel = " << channel << "\n";
+	if (allNotes.size() == 0){
+		return "NO INSTRUMENT";
+	}
+
+	int id		=	allNotes[0].instrument;
+	int channel =	allNotes[0].channel;
+
 	if (channel == 9) {
-		std::cout << "DRUMS\n";
-		return;
+		return "Drums";
 	}
 	if (id < 8) {
-		std::cout << "Piano\n";
+		return "Piano";
 	}
 	else if (id < 16) {
-		std::cout << "Chromatic Percussion\n";
+		return "Chromatic Percussion";
 	}
 	else if (id < 24) {
-		std::cout << "Organ\n";
+		return "Organ";
 	}
 	else if (id < 32) {
-		std::cout << "Guitar\n";
+		return "Guitar";
 	}
 	else if (id < 40) {
-		std::cout << "Bass\n";
+		return "Bass";
 	}
 	else if (id < 48) {
-		std::cout << "Strings\n";
+		return "Strings";
 	}
 	else if (id < 56) {
-		std::cout << "Ensemble\n";
+		return "Ensemble";
 	}
 	else if (id < 64) {
-		std::cout << "Brass\n";
+		return "Brass";
 	}
 	else if (id < 72) {
-		std::cout << "Reed\n";
+		return "Reed";
 	}
 	else if (id < 80) {
-		std::cout << "Pipe\n";
+		return "Pipe";
 	}
 	else if (id < 88) {
-		std::cout << "Synth Lead\n";
+		return "Synth Lead";
 	}
 	else if (id < 96) {
-		std::cout << "Synth Pad\n";
+		return "Synth Pad";
 	}
 	else if (id < 104) {
-		std::cout << "Synth Effects\n";
+		return "Synth Effects";
 	}
 	else if (id < 112) {
-		std::cout << "Ethnic\n";
+		return "Ethnic";
 	}
 	else if (id < 120) {
-		std::cout << "Percussive\n";
+		return "Percussive";
 	}
 	else {
-		std::cout << "Sound Effects\n";
+		return "Sound Effects";
 	}
+	return "NO INSTRUMENT";
 }
+
 
 void NoteHandler::update(sf::Time currentTime)
 {
@@ -132,58 +162,3 @@ void NoteHandler::addNote(sf::Time start, sf::Time end, float freq)
 	allNotes.push_back(tmp);
 }
 
-void NoteHandler::loadFromMidiTrack(TrackChunk & track, int timeDivision)
-{
-	float tickFraction = timeDivision * 2.0f;
-	long time=0;
-	int program_change = 0;
-	std::vector<Note> clickedNotes;
-	auto events = track.getEvents();
-	for (auto event : events) {
-		const Event * ev = event.getEvent();
-		if (ev->getType() == MidiType::EventType::MidiEvent) {
-			//std::cout << "_______NOTE_______\n";
-			const MidiEvent * tmp = (MidiEvent*)ev;
-			auto status = tmp->getStatus();
-			int deltaTime = event.getDeltaTime().getData();
-			int velocity = tmp->getData() & 0b1111111;
-			time += deltaTime;// < 10000 ? deltaTime : 0;
-			if (status == MidiType::NoteOn && velocity != 0) {
-				sf::Time clickTime = sf::seconds(time / tickFraction);
-				Note note;
-				note.velocity = velocity / 127.0f;
-				note.clickTime = clickTime;
-				note.keyNum = (int)tmp->getNote();
-				note.freq = keyIdToFrequency((int)tmp->getNote());
-				clickedNotes.push_back(note);
-			}
-			if (status == MidiType::NoteOff || (status == MidiType::NoteOn && velocity==0)) {
-				for (int i = 0; i < clickedNotes.size(); ++i) {
-					auto & note = clickedNotes[i];
-					if (note.keyNum == (int)tmp->getNote()) {
-						//std::cout << "ADDED NOTE | startPos = " << note.clickTime.asSeconds() << "\n";
-						sf::Time relTime = sf::seconds(time / tickFraction); //200
-						note.releaseTime = relTime;
-						allNotes.push_back(note);
-						clickedNotes.erase(clickedNotes.begin() + i);
-						i--;
-					}
-				}
-			}
-			if (status == MidiType::ProgramChange) {
-				int a = program_change;
-				program_change = tmp->getData();
-				//std::cout << "PC = " << program_change << " | channel = " << (tmp->getStatus() & 0xF) << " \n";
-				DEBUG_PRINT_INSTRUMENTNAME(program_change, tmp->getChannel());
-			}
-		}
-	}
-	std::cout << "Added " << allNotes.size() << " notes\n";
-	//Sort notes based on startTime:
-	//std::sort(allNotes.begin(), allNotes.end(), NoteHandler::sort);
-	std::sort(allNotes.begin(), allNotes.end(),
-		[](const Note & a, const Note & b) -> bool
-	{
-		return a.clickTime < b.clickTime;
-	});
-}

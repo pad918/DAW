@@ -8,7 +8,7 @@
 class Sampler : public Synth {
 private:
 	std::vector<float> samples;
-	int baseKey = 0; //NOT IMPLEMENTED!
+	int baseKey = 69; //69
 public:
 	Sampler(std::string pathToSample);
 	virtual void renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time globalPlayBackPostion, int sampleRate);
