@@ -13,6 +13,9 @@ float Note::getAmp(sf::Time globalPlayBackPostion, float attack_time, float deca
 			isDead = true;
 			return 0;
 		}
+		if (amplitude > 1 || amplitude < 0) {
+			int h = 0;
+		}
 		return amplitude;
 	}
 	return 1.0f;

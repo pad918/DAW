@@ -15,7 +15,7 @@ void HarmonicForm::renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time gl
 	//Info: https://en.wikipedia.org/wiki/Additive_synthesis
 	int playBackPosInSamples = (int)(0.5f + sampleRate * globalPlayBackPostion.asSeconds());
 	for (int i = 0; i < bufferSize; ++i) {
-		noteHandler.update(globalPlayBackPostion);
+		noteHandler.update(globalPlayBackPostion + sf::seconds((float)i/44100.0f));
 		int sumAllNotes = 0;
 		for (Note & note : noteHandler.activeNotes) {
 			int tmp = 0;

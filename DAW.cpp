@@ -173,14 +173,14 @@ DAW::DAW()
 			if (instrument != 0) {
 				tmp_synths.push_back(new HarmonicForm());
 				tmp_synths.back()->noteHandler.setNotes(channel);
-				tmp_synths.back()->amplitude = 0.35f;
+				tmp_synths.back()->amplitude = 0.15f;
 			}
 			std::cout << tmp_synths.back()->noteHandler.getInstrumentName() << "\n";
 		}
 		else {
 			tmp_synths.push_back(new DrumMachine());
 			tmp_synths.back()->noteHandler.setNotes(channel);
-			tmp_synths.back()->amplitude = 0.35f;
+			tmp_synths.back()->amplitude = 0.085f;
 			std::cout << tmp_synths.back()->noteHandler.getInstrumentName() << "\n";
 		}
 	}
