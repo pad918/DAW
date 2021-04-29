@@ -19,8 +19,7 @@ int main() {
 	DAW daw;
 	/*********************************/
 	UI_factory ui;
-	UI * main_ui = ui.createPanel(&daw, nullptr, sf::Vector2i(0,0), sf::Vector2i(1000, 500), sf::Color(51,51,51));
-	main_ui->addElement(ui.createPanel(&daw, main_ui, sf::Vector2i(50, 50), sf::Vector2i(50, 50), sf::Color::Red));
+	UI * main_ui = ui.createSynthList(&daw, nullptr, sf::Vector2i(0,0), sf::Vector2i(300, 600), sf::Color(255, 144, 144));
 	/********************************/
 	sf::RenderWindow window(sf::VideoMode(1000, 500), "DAW V_0.0");
 	window.setFramerateLimit(60);
@@ -38,7 +37,8 @@ int main() {
 		window.clear();
 		daw.render(window);
 		main_ui->draw(window);
-		main_ui->setArea(sf::Vector2i(100 + 50*std::cosf(frame/1000.0f), 100 + 50*std::sinf(frame / 1000.0f)), sf::Vector2i(100, 100));
+		main_ui->poll(sf::Mouse::getPosition(window), sf::Mouse::isButtonPressed(sf::Mouse::Left));
+		main_ui->setArea(sf::Vector2i(100 + 50*std::cosf(frame/100.0f), 100 + 50*std::sinf(frame / 100.0f)), sf::Vector2i(1000, 500));
 		window.display();
 		frame++;
 	}

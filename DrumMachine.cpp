@@ -14,6 +14,13 @@ DrumMachine::DrumMachine()
 	std::cout << "Loading samples...\n";
 	bassDrum = loadSamples("samples/bass_drum.wav");
 	highHat = loadSamples("samples/hihat.wav");
+
+	//GET BASS DRUM SUM
+	double a = 0;
+	for (auto samp : bassDrum) {
+		a += std::abs(samp);
+	}
+	std::cout << "BASS DRUM = " << a << " | size of basedum = " << bassDrum.size() << "\n";
 }
 
 void DrumMachine::renderSamples(sf::Int16 * buffer, int bufferSize, sf::Time globalPlayBackPostion, int sampleRate)

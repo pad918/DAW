@@ -148,7 +148,7 @@ float DAW::keyIdToFrequency(int id)
 DAW::DAW()
 {
 	//TEST MIDI
-	Midi midi{ "eternal2.mid" };
+	Midi midi{ "badapple.mid" };
 	auto tracks =  midi.getTracks();
 	auto& header = midi.getHeader();
 	//auto& tracks =	f.getTracks();
@@ -173,14 +173,14 @@ DAW::DAW()
 			if (instrument != 0) {
 				tmp_synths.push_back(new HarmonicForm());
 				tmp_synths.back()->noteHandler.setNotes(channel);
-				tmp_synths.back()->amplitude = 0.15f;
+				tmp_synths.back()->amplitude = 0.5f;
 			}
 			std::cout << tmp_synths.back()->noteHandler.getInstrumentName() << "\n";
 		}
 		else {
 			tmp_synths.push_back(new DrumMachine());
 			tmp_synths.back()->noteHandler.setNotes(channel);
-			tmp_synths.back()->amplitude = 0.085f;
+			tmp_synths.back()->amplitude = 0.25f;
 			std::cout << tmp_synths.back()->noteHandler.getInstrumentName() << "\n";
 		}
 	}

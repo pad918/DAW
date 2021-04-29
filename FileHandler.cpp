@@ -19,18 +19,24 @@ std::vector<int16_t> FileHandler::loadWav(std::string path)
 	unsigned int bitSampleDiv8 = 0;
 	unsigned int dataSize = 0;
 	unsigned int dataStartPos = 0;
-	std::ifstream infile(path);
+	//std::ifstream infile(path);
 
 	//get length of file
-	infile.seekg(0, std::ios::end);
-	size_t length = infile.tellg();
-	infile.seekg(0, std::ios::beg);
+	std::ifstream input(path, std::ios::binary);
+	std::vector<unsigned char> data(std::istreambuf_iterator<char>(input), {});
+	long length = data.size();
+	//infile.seekg(0, std::ios::end);
+	//size_t length = infile.tellg();
+	//infile.seekg(0, std::ios::beg);
 	if (length < 45 || length > 100000000) {
 		std::cout << "ERROR: file is too big or too small\n";
 		return std::vector<int16_t>();
 	}
 	char* buffer = new char[length];
-	infile.read(buffer, length);
+	for (int i = 0; i < length; ++i) {
+		buffer[i] = data[i];
+	}
+	//infile.read(buffer, length);
 
 	//Print header:
 	//for (int i = 0; i < 44; ++i) {
@@ -85,6 +91,7 @@ std::vector<int16_t> FileHandler::loadWav(std::string path)
 		samples[ittr] = (int16_t)tmp;
 		ittr++;
 	}
+	delete[] buffer;
 	return samples;
 }
 

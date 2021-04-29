@@ -38,6 +38,11 @@ void UI::removeElement(UI * UI_element)
 	}
 }
 
+void UI::setColor(sf::Color color)
+{
+	sprite.setFillColor(color);
+}
+
 void UI::setArea(sf::Vector2i position, sf::Vector2i areaSize)
 {
 	size = areaSize;

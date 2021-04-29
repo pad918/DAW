@@ -16,9 +16,6 @@
 
 class DAW {
 private:
-	//Virtual functions
-	sf::SoundStream * stream;
-	std::vector<Synth *> synths;
 	std::vector<Note> loadNotesFromTrack(TrackChunk &track, int timeDivision);
 	std::vector<std::vector<Note>> splitMidiFile(std::list<TrackChunk> & tracks, int timeDivision);
 	void addNoteToCorrectChannel(Note & note, std::vector<std::vector<Note>> & channels);
@@ -27,5 +24,6 @@ public:
 	DAW();
 	void update();
 	void render(sf::RenderWindow & window);
-	
+	std::vector<Synth *> synths;
+	sf::SoundStream * stream;
 };
